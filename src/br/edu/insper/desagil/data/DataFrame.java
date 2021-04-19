@@ -7,7 +7,6 @@ import java.util.Map;
 
 public class DataFrame {
 	private Map<String, List<Double>> columns;
-	public String label;
 
 	public DataFrame() {
 		this.columns = new HashMap<>();
@@ -16,17 +15,21 @@ public class DataFrame {
 	public void addColumn(String label, List<Double> values) {
 		this.columns.put(label, new ArrayList<>(values));
 	}
-	DataFrameException list_invalid = new DataFrameException("Column " + label + " is invalid!");
-	DataFrameException list_empty = new DataFrameException("Column " + label + " is empty!");
-
-	public double min(String label) {
+	
+	public void checaColuna(String label) {
 		if (!this.columns.containsKey(label)) {
-			throw list_invalid;
+			throw new DataFrameException("Column " + label + " is invalid!");
 		}
 		List<Double> values = this.columns.get(label);
 		if (values.size() == 0) {
-			throw list_empty;
+			throw new DataFrameException("Column " + label + " is empty!");
 		}
+	}
+
+	public double min(String label) {
+		checaColuna(label);
+		
+		List<Double> values = this.columns.get(label);
 
 		double m = Double.POSITIVE_INFINITY;
 		for (double value: values) {
@@ -38,13 +41,10 @@ public class DataFrame {
 	}
 
 	public double max(String label) {
-		if (!this.columns.containsKey(label)) {
-			throw list_invalid;
-		}
+		checaColuna(label);
+		
 		List<Double> values = this.columns.get(label);
-		if (values.size() == 0) {
-			throw list_empty;
-		}
+
 
 		double m = Double.NEGATIVE_INFINITY;
 		for (double value: values) {
@@ -56,14 +56,10 @@ public class DataFrame {
 	}
 
 	public double sum(String label) {
-		if (!this.columns.containsKey(label)) {
-			throw list_invalid;
-		}
+		checaColuna(label);
+		
 		List<Double> values = this.columns.get(label);
-		if (values.size() == 0) {
-			throw list_empty;
-		}
-
+	
 		double s = 0;
 		for (double value: values) {
 			s += value;
@@ -72,13 +68,10 @@ public class DataFrame {
 	}
 
 	public double avg(String label) {
-		if (!this.columns.containsKey(label)) {
-			throw list_invalid;
-		}
+		checaColuna(label);
+
 		List<Double> values = this.columns.get(label);
-		if (values.size() == 0) {
-			throw list_empty;
-		}
+	
 
 		double s = 0;
 		for (double value: values) {
@@ -88,13 +81,10 @@ public class DataFrame {
 	}
 
 	public double var(String label) {
-		if (!this.columns.containsKey(label)) {
-			throw list_invalid;
-		}
+		checaColuna(label);
+		
 		List<Double> values = this.columns.get(label);
-		if (values.size() == 0) {
-			throw list_empty;
-		}
+		
 
 		double s;
 
@@ -112,13 +102,10 @@ public class DataFrame {
 	}
 
 	public double std(String label) {
-		if (!this.columns.containsKey(label)) {
-			throw list_invalid;
-		}
+		checaColuna(label);
+		
 		List<Double> values = this.columns.get(label);
-		if (values.size() == 0) {
-			throw list_empty;
-		}
+		
 
 		double s, m;
 
